@@ -1,0 +1,283 @@
+---
+title: "Correlates of conflict resolution across cultures"
+author: "Zachary H. Garfield"
+date: "9/28/2020"
+output: 
+  bookdown::html_document2:
+    number_sections: false
+bibliography: conflict_ms.bib
+csl: apa-6th-edition.csl
+---
+
+```{r setup, echo=FALSE, warning=FALSE, comment=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
+load("conflict.RData")
+library(leadershipdata)
+library(tidyverse)
+library(ggmosaic)
+library(viridis)
+library(glmnet)
+library(lme4)
+library(emmeans)
+library(car)
+library(hagenutils)
+library(rstan)
+library(rstanarm)
+library(modelbased)
+library(ggeffects)
+library(patchwork)
+library(readr)
+library(kableExtra)
+library(ggrepel)
+library(sjPlot)
+```
+
+### Preprint statment
+The current manuscript is a pre-print and currently under review as of 13 April, 2021.
+
+## Abstract
+
+Conflicts are ubiquitous between individuals within communities and organizations as well as between groups, including societies and nations. Effective conflict resolution processes are an essential component of individual well-being, group functioning, and global security. Leadership is often a key component of conflict management and resolution. The evolutionary human sciences have suggested conflict resolution processes are shaped by psychological heuristics, social norms, and cultural variability. Despite much theorizing there is limited empirical data on conflict resolution processes across the full range of human cultural diversity. The current study uses a new cross-cultural database of 109 researcher-coded leadership dimensions from over 1200 ethnographic texts describing 59 cultures, developed from the electronic Human Relations Area Files – a digital collection of primary ethnographic documents. These results provide a rare view of the correlates of conflict resolution processes and reveal their universality across cultures and diversity across social contexts. 
+
+<!-- Conflicts are ubiquitous between individuals within communities and organizations as well as between groups, including societies and nations. Effective conflict resolution processes are an essential component of individual well-being, group functioning, and global security. Leadership is often a key component of conflict management and resolution. Groups often "live or die" based on their ability to effectively settle variable conflict scenarios. The evolutionary human sciences have suggested conflict resolution processes are shaped by psychological heuristics, social norms, and cultural variability. Despite much theorizing there is limited empirical data on conflict resolution processes across the full range of human cultural and social diversity. This is a limitation for the wider field of conflict studies; in order develop broadly generalizable theories and effective policies a more detailed and cross-cultural view of human conflict resolution is required. The current study uses a new cross-cultural database of 109 researcher-coded leadership dimensions from over 1200 ethnographic texts describing 59 cultures, developed from the electronic Human Relations Area Files -- a digital collection of primary ethnographic documents. Methods and analyses were designed to identify variation in evidence for conflict resolution (one of the leadership dimensions provided) across cultures and group contexts and to identity the traits of individuals who resolve conflicts and the individual costs and benefits of conflict resolution across human societies. These results provide a rare view of the correlates of conflict resolution processes and reveal their universality across cultures and diversity across social contexts. There was evidence kin groups exhibited greater conflict resolution processes than political groups. There was also greater evidence of within-group conflict resolution processes than between-group, which did not substantially vary across cultures with different subsistence strategies (e.g., hunter-gatherers vs. agriculturalists) or group context (e.g., kin groups vs. political groups) with two exceptions -- leaders of military groups were involved in greater between-group conflicts and leaders of religious groups were involved in greater within-group conflicts. Exploratory analyses revealed the strongest predictors of providing conflict resolution services were other group-beneficial functions including group representation, providing counsel, protection, and punishment, as well as the qualities of interpersonal skills and fairness. Those in conflict, i.e., those receiving conflict resolution services, only received the direct benefit of the conflict resolution itself. Providers of conflict resolution services, i.e., conflict resolution leaders, received a wider range of indirect benefits including resources, mating benefits, and social services. -->
+<!-- RED -->
+
+<!-- The study of conflict resolution is a multidisciplinary pursuit with profound implications within academia as well as in politics, management studies, and industry. -->
+
+## Introduction
+
+Humans and human societies are exceptional in our abilities to sustain large-scale, complex cooperation [@henrich_why_2007; @santos_coevolution_2018], including between relatives, strangers, residential communities, and political groups. Nature, including human sociality, is clearly not "red in tooth and claw" as @tennyson_memoriam_1850 famously composed. Diverse non-human species also demonstrate and depend on substantial cooperation [e.g., @allee_cooperation_1951]. Such cooperative relationships, however, are vulnerable and can quickly decay in the face of escalating and unresolved conflicts, particularly between autonomous human populations, such as extended kin groups and nation states. Group living necessarily creates ample opportunity for inter-individual conflict. Across mammalian species the killing of conspecifics is most frequent among social species that rely on and engage in territorial defense, and among primates especially [@gomez_phylogenetic_2016]. Various dispute settlement mechanisms are equally widespread across social species and conflict resolution processes are expected to be an essential and universal feature of human groups [@brown_human_1991; @garfield_universal_2020; @boehm_evolutionary_1982]. The underlying correlates of individuals who function to resolve conflicts within and between groups and the specific cultural and group contexts that present greater conflict resolution demands have been widely discussed across scientific disciplines, but empirical evidence from a representative sample of human social and cultural diversity has remained unavailable. Through novel exploratory comparative analyses the present study aims to fill these empirical gaps.
+
+### Sociality and demands of conflict resolution
+
+For a minority of mammals including humans and most primates, group living is obligatory [@hrdy_evolutionary_2006]. Group living then must have in some contexts among some species, offered individuals a net fitness benefit over evolutionary history [@alexander_evolution_1974]. Putative benefits include reduced individual risks from herd formation, coordination of individuals to accomplish highly profitable yet difficult goals, and increased abilities to monitor and patrol territory [@bickerton_confrontational_2011; @willems_social_2017; @smith_evolution_2012]. In the context of group living, co-residents who effectively solve inter-individual conflicts can benefit both at the individual-level via reduced aggression (direct and indirect) and increased cooperation [@alexander_evolution_1974; @chapman_costs_2015; @hess_psychological_2006]. Groups also stand to benefit from established conflict resolution mechanisms via cultural group selection processes [@richerson_cultural_2016; @smith_cultural_2020] and gains from international cooperation [@snidal_relative_1991; @uitto_management_2002].
+
+The evolution and maintenance of group living faces significant challenges stemming from, in part, opportunities for conflicts within and between groups --  a point further exemplified given that most species, including about 70% of all mammals, do not live in groups [@wilson_mammal_2005]. Self-interested individuals in close proximity can be in conflict, for example, over access to material resources, mating opportunities, and preferential territory [@morris_comments_1954; @parker_sexual_2006; @smith_inuit_1985; @ross_political_1983]. Long-term co-residents and close kin can develop additional conflicts within a social or organizational structure including over position in a status hierarchy or social network and in economic and reciprocal exchange [@parker_intrafamilial_2002; @boulding_organization_1957; @hames_kin_2015; @berger_status_1980]. Moreover, groups of individuals across all levels of social organization (e.g., kin, residential, economic, or political levels) can develop various inter-group conflicts [@wrangham_intergroup_2012; @roscoe_social_2009; @glowacki_evolutionary_2017].
+
+Although conflicts are common, conflict resolution mechanisms are also common and typically associated with a leadership role. Social nonhuman species demonstrate conflict resolution mechanisms such as reconciliation behaviors between individuals following an aggressive conflict as well as intervening behaviors by a third-party, often a high-ranking or influential group member [@aureli_conflict_2002; @wilson_sociobiology_1980; @aureli_natural_2000]. Among human groups, collectivist philosophies, i.e., "united we stand, divided we fall," are a common feature of national identity and political philosophies espoused by leaders to their constituents [@jacobs_aesops_1991] and can promote prosocial, anti-conflict norms. Theoretical models also suggest cooperative dynamics can emerge in heterogeneous, conflict-prone groups when, for example, dominant leaders provide policing and conflict resolution services [@frank_policing_1996; @mesterton-gibbons_models_2011].
+
+### Conflict resolution in comparative perspective
+
+@smith_leadership_2016 provide an empirical cross-species and cross-cultural comparison of within-group conflict resolution, contrasting nonhuman animal populations with small-scale human populations. Across their sample, within-group conflict resolution functions were generally not widely distributed, i.e., a small number of adults had greater influence in conflict resolution in both nonhuman and small-scale human societies. This strongly implicates the role of individual leaders, or individuals who maintain a disproportionate level of influence within a group [@von_rueden_leadership_2015; @kantner_identifying_2010], in the resolution of within-group conflicts.
+
+@smith_leadership_2016 also found that among both nonhuman species and small-scale human societies leaders and followers generally equally benefit from within-group conflict resolution (though the specifics of 'relative benefits' were not coded for) and conflict resolution roles are more often achieved rather than ascribed, suggesting followers and group dynamics shape the qualities of leaders who resolve conflicts. In small-scale human societies, however, leaders who resolve within-group conflicts are more likely to have to coercive power [@smith_leadership_2016]. Although the @smith_leadership_2016 sample is small (*n* = 16) and their empirical measures are ratings based on ethnographic and ethological expertise, these results do provide a novel and useful framework for developing a broader view of conflict resolution among humans and in evolutionary perspective.
+
+Among human populations, and smaller-scale societies in particular, social norms, cultural institutions, and supernatural beliefs can prevent and mediate potential or actual instances of inter-individual conflict without direct resolution efforts of a third party [@glowacki_emergence_2020; @basedow_australian_1925]. For example, the ekila and poison oracle practices among Central African foragers [@lewis_ekila_2008] and other supernatural mediation and divination rituals can function to resolve conflicts without much decision-making autonomy or influence from a third-party community member. Nonetheless, concerted dispute settlement by a third party is probably universal among human groups in at least some contexts [@brown_human_1991; @garfield_universal_2020]. Given the broad phylogenetic distribution of conflict resolution behaviors and the universality of conflict resolution processes among human populations, there are likely to be evolved psychological underpinnings to human conflict resolution strategies, as well as reliable facultative responses to ecological conditions and culturally evolved systems exhibiting variability and convergence. 
+
+### Culture and conflict resolution
+
+Early ethnographers extensively documented cultural variation in typologies of conflicts such as feuds, warfare, and fighting, but cohesive theories grappling with cultural variation were developed much later including theories on the the evolution of human warfare [@turney-high_primitive_1949; @wright_study_1942] and influential sociological theories (e.g., Durkheim, Marx, Weber) [for review see @levine_anthropology_1961; @sluka_anthropology_1992]. Early anthropologists also tended to focus heavily on the nature and structure of conflicts, much more so than conflict resolution. For example, British sociocultural and interpretive anthropologists, e.g. @gluckman_custom_1956 and @turner_forest_1970, suggested conflicts within larger social units reinforce and contribute to the cohesiveness of larger social structures. Structural anthropologists, however, [e.g., @beals_divisiveness_1966] suggested conflict is a deleterious consequence of various "pressures" exerted on social systems, and often contrasted intrafamilial, intracommunity, intercommunity, and intercultural conflicts. 
+
+<!-- WEISSNER -->
+
+More recently, evolutionary anthropologists have emphasized the important role of leaders, senior kin, and other influential community members as the managers of conflicts withing and between families and kin groups and have suggested such conflict resolution processes underlay much of human psychological, biological, and cultural evolution [@glowacki_leadership_2015; @hames_kin_2015; @garfield_evolutionary_2019; @boehm_biocultural_2013]. Drawing on the ethnography of smaller-scale, politically autonomous populations and empirical field data @glowacki_leadership_2015 frame within-group conflict resolution as one type of collective action problem populations must overcome. They suggest effective leadership emerges and is selected for as a critical component in the resolution of collective action problems within an institutional system and individuals with wider social networks, greater knowledge, and physical fromidability will be more likely to effectively resolve inter-individual conflicts. Nonetheless, most of the evolutionary anthropological literature on conflict has focused on evolutionary underpinnings of warfare and between group conflict [see @glowacki_evolutionary_2017; @sluka_anthropology_1992; @lopez_evolutionary_2020].
+
+## Study aims
+
+Conflict resolution occurs among every human society but we currently know very little about whether such processes utilize similar or variable social mechanisms and if they rely on the same individual characteristics across the diversity of human social and cultural contexts. Answering such questions requires a broad, comparative, and cross-cultural framework. Based on the current theoretical and empirical literature, outstanding questions on human conflict resolution include: 1) what are the underlying behavioral, personality, or other characteristics that characterize leaders who resolve conflicts across diverse cultural and social contexts?; 2) what are the specific costs or benefits individuals incur from conflict resolution processes?; and 3) how widespread is coercive authority or prosociality of leaders who solve disputes, across diverse societies? Lastly, 4) does group context or cultural typologies predict variation in human conflict resolution? The present study aims to fill these empirical gaps in the human conflict resolution literature through a detailed exploratory analysis of a new cross-cultural database constructed from the ethnographic record (produced by @garfield_universal_2020).
+
+@garfield_universal_2020 reported that resolving conflicts was the most cross-culturally frequent leadership function and among the most frequent of 109 leadership dimensions documented in 78% of cultures and in 14% of all text records, in a large ethnographic sample of 59 cultures and over 1200 ethnographic descriptions. Given the frequency of conflict resolution in the ethnographic record of leadership and important outstanding questions, further analyses are warranted.
+
+Whereas @garfield_universal_2020 provide a broad exploratory analyses on the universality and variability of leadership dimensions using the "leadership data package," the current study focuses in detail on the "conflict resolution" variable in this database to descriptively analyze the presence of ethnographic evidence for conflict resolution processes across subsistence types (e.g., hunter-gatherers, pastoralists, or agriculturalits), and group context (e.g., residential, kin, or political groups), and to identify if this evidence is biased towards conflicts within or between groups. Text-analysis is used to provide insight into the linguistic content of the ethnographic record and the words ethnographers frequently use to describe conflict resolution. The leadership dimensions predictive of evidence for conflict resolution will identity the behavioral and phenotypic correlates of individuals who resolve conflicts and of the cultural views of conflict resolution across human societies. Lastly, culture and group-level measures will be used to predict evidence for conflict resolution to identify how conflict resolution may covary with cultural and social contexts. 
+
+
+## Methods
+
+### Cross-cultural database
+
+This study uses data from the *leadership data package* (DOI:10.5281/zenodo.4018788), a novel cross-cultural database originally constructed by @garfield_evolutionary_2019 and expanded by @garfield_universal_2020, designed to capture a wide range of ethnographic content related to leadership from the 60-cultural Probability Sample Files [@naroll_proposed_1967] of the electronic Human Relations Area Files (eHRAF). The eHRAF is an electronic text database of primary ethnographic documents which can be queried using a thorough subject code system (Outline of Cultural Materials or OCM codes) and/or by keyword, at the paragraph level. The *leadership data package* is based on 1,212 ethnographic paragraphs (termed text records) extracted from the eHRAF using a broad search strategy targeting general descriptions of leadership. It includes two data frames of researcher-coded measures, one of which includes variables on evidence for 109 dimensions of leader qualities and functions, including conflict resolution (their *Resolve conflict* variable), as well as measures of costs and benefits for leaders and followers. A researcher-coded measure of group context (see Table \@ref(tab:groupcontext)), the context of leader functions (i.e., within-group, between-group, or both), and culture and document-level metadata (e.g., subsistence strategy, year of publication, author) are also provided. The current study uses this database of 1,212 text records, the associated 109 leadership dimensions, and culture and document-level measures in novel exploratory, comparative analyses on conflict resolution. For additional details on the construction of the database see @garfield_evolutionary_2019 and @garfield_universal_2020.
+
+### Data analysis
+
+The first goal of the current study was to empirically describe the ethnographic record of human conflict resolution through text analyses. Ethnography-based data are fundamentally rooted in bodies of text authored by ethnographers and other professional writers. The semantic content of these documents can be analyzed using text analytic methods to supplement analyses from researcher-coded variables. A document-term matrix was developed of the corpus of text records and elasticnet logistic regression from the glmnet package [@friedman_regularization_2010] was used to identify the terms that predict evidence for conflict resolution (see Results for additional details). Elasticnet regression models are penalized regression models that are effective when the number of predictors is large relative to the number of observations ($n<<p$). Elasticnet regression models in the current study used the "lasso" penalty ($\alpha=1$), which will often set many coefficients to 0, thereby identifying the most important predictors among all covariates.
+
+Building on results from @garfield_universal_2020, the second goal was to describe the distribution of evidence for conflict resolution across cultures with distinct subsistence strategies and across distinct group contexts. That is, when there is evidence leaders resolve conflicts, is it biased to a particular cultural or social context? And, to identify how evidence for conflict resolution in within or between group contexts varied compared across these categories. The third goal was to identify which leadership dimensions predicted evidence for conflict resolution. Two elasticnet logistic regression models were used to identify A) the qualities and functions of leaders who resolve conflicts and B) the cost and benefits for leaders and followers associated with conflict resolution processes. The fourth goal, also expanding on findings from @garfield_universal_2020, was to more closely examine variation in conflict resolution by cultural and social variation, namely by subsistence strategy (see Figure \@ref(fig:geographic)) and group context (see Table \@ref(tab:groupcontext)), using logistic mixed effects models and the lme4 package [@bates2015]. 
+
+All analyses were conducted with `r R.version.string`.
+
+## Results
+
+The *leadership data package* sample comprises `r nrow(all_data)` text records from `r length(unique(leadershipdata::documents$d_ID))` documents describing `r length(unique(all_data$d_culture))` cultures. Detailed descriptive results of ethnographic paragraphs in the sample are given in @garfield_universal_2020, including discussing of potential bias by ethnographer gender, year of publication, total pages of ethnography per culture, etc. (overall, potential biases along these lines were deemed to be negligible). The geographic distribution of the culture sample is reproduced here in Figure \@ref(fig:geographic).
+
+```{r geographic, fig.width=15, fig.cap="The geographical distributions of cultures in this analysis. Symbol shapes indicate subsistence strategy and symbol size indicates the number of documents available for that culture. Axes are degrees latitude and longitude. Reproduced from Garfield et al. (2020)."}
+library(maps)
+world_map <- map_data("world")
+p_map <- ggplot(world_map, aes(x = long, y = lat)) +
+  geom_polygon(aes(group = group), fill="lightgray", colour = "white") +
+  geom_point(
+    data = leader_cult, 
+    aes(
+      c_longitude,
+      c_latitude, 
+      colour = subsistence, 
+      shape = subsistence, 
+      size = documents
+    )
+  ) +
+  geom_text_repel(
+    data = leader_cult,
+    aes(c_longitude, c_latitude, label = Name),
+    force = 3,
+    size = 2.75,
+    colour = '#333333'
+    ) +
+  scale_y_continuous(limits = c(-60, 80)) +
+  coord_fixed() +
+  labs(x='', y='', shape = 'Subsistence', colour = 'Subsistence', size = 'Documents') +
+  guides(shape = guide_legend(override.aes = list(size = 4))) +
+  theme_bw(15)
+ggsave(filename = 'Figures/map.pdf', p_map)
+p_map
+```
+
+### Text analysis of conflict resolution ethnography
+
+To empirically characterize the ethnographic record of conflict resolution, a document-term matrix (DTM) was created of all "informative" words in the corpus of text records and the frequency with which they occurred in each text record. In this matrix each row corresponds to one of the 1,212 text record and each column to one of the unique "informative" words, with the cell values indicating the number of times that word appears in that text record. Then, an elasticnet logistic regression model (with the lasso penalty, $\alpha = 1$) of *Resolve conflict* (0/1) was fit as a function of the frequencies of all `r ncol(leader_dtm)-1` words. Words that were strong positive predictors exemplify the semantic content and ethnographer diction of the text records which provided evidence for conflict resolution processes by leaders. The strongest positive predictors (terms) included, unsurprisingly, "dispute" and "quarrel," describing conflict scenarios. The next group of positive predictors included, "peace," "settle," and "mediator," describing resolution processes. Other notable positive predictors included, "decide," implicating decision making processes by leaders and a few terms specific to social contexts, such as "religious" and "political" which suggests social context maybe critical in descriptions of conflict resolution. Several positive predictors were also specific to local and family contexts, such as "local," "house," and "clan." Terms associated with more institutionalized and hierarchical leadership systems tended to be negative predictors. For example, "royal," "son," and "king" were negative predictors, suggesting the ethnographic record of leadership among kingdoms and by kings is less likely to discuss conflict resolution. 
+
+```{r text-plot, echo=FALSE, fig.cap= "Non-zero coefficients of logistic elasticnet text analysis regression model of evidence for *Resolve conflict*. Coefficients indicate the words whose frequencies in each text record best predicted evidence for *Resolve conflict* in each text record. Red triangles indicate positive coefficents. Purple circles indicate negative coefficents."}
+ggsave(filename = 'Figures/conflict_words_plot.pdf', conflict_words_plot, height = 10)
+conflict_words_plot
+```
+
+
+### Evidence for conflict resoultion by subsistence and group context
+
+The distribution of *evidence for* conflict resolution across subsistence strategies and group context (see Table \@ref(tab:groupcontext)) and in relationship to the context of conflict (e.g., within-group, between-group) is depicted in Figures \@ref(fig:mosaic-sub) and \@ref(fig:mosaic-context), for the `r table(leader_text2$functions_ResolveConflcit)[2]` text records which provide evidence for conflict resolution. The *Context of conflict* variable indicates if the evidence for the conflict resolution function was defined as "within-group", "between-group", "both", or "unknown" ("unknown" category was only coded for three text records in total and has been removed from these figures).
+
+```{r groupcontext, fig.cap="Reproduced from @garfield_universal_2020."}
+gc <- read_tsv('group context table.tsv')
+kable(gc, caption="Operationalization of the group context variable. Reproduced from Garfield et al. (2020).")
+```
+
+Figure \@ref(fig:mosaic-sub) reveals that across cultures with distinct subsistence strategies, the ethnography of conflict resolution does not substantially vary across between or within-group conflicts and there is a substantial bias in favor of within-group conflict resolution processes, with one possible exception that pastoralists demonstrated slightly more relative evidence for between-group conflict resolution than other subsistence groups. Across all subsistence strategy types, however, there is evidence of between-group conflict resolution processes. 
+
+```{r mosaic-sub, echo=FALSE,fig.width=20, fig.height=7, fig.cap="The distribution of text records providing evidence for conflict resolution by subsistence and the context of conflict. Areas of the bars are proportional to the number of text records in that category."}
+ggsave(filename = 'Figures/plot_sub_context.pdf', plot_sub_context)
+plot_sub_context
+```
+
+Across group contexts there are also general similarities in the distribution of within and between-group conflict resolution (see Figure \@ref(fig:mosaic-context)), with two striking and obvious exceptions; leaders of religious groups primarily resolve within-group conflicts (with marginal evidence of conflicts involving both within and between group dimensions) and leaders of military groups are involved in a substantial amount of between-group conflict resolution, though there is evidence of within-group conflict resolution among military leaders as well.
+
+```{r mosaic-context, echo=FALSE, fig.width=20, fig.height=7,  fig.cap="The distribution of text records providing evidence for conflict resolution by group context and the context of conflict. Areas of the bars are proportional to the number of text records in that category."}
+ggsave(filename = 'Figures/plot_group_context.pdf', plot_group_context)
+plot_group_context
+```
+
+
+### Leadership dimensions predictive of conflict resolution
+
+Two elasticnet logistic regression models (with the lasso penalty, $\alpha = 1$) of *Resolve conflict* were fit as a function of A) the other 72 quality and function leadership dimensions, and B) the 36 leadership costs and benefit measures (nine measures which include costs and benefits variables for both leaders and followers, i.e., $9\times2\times2$). See Tables S1 and S2 in the supplementary information for operational definitions of all leadership dimensions (reproduced from @garfield_universal_2020). These models aim to identify which dimensions were associated with evidence for conflict resolution. The qualities and functions were modeled separately from the costs and benefits. 
+
+<!-- Although both models are correlational in nature, conceptually other qualities and functions are more likely to be inputs or promote conflict resolution processes whereas costs and benefits are more likely to be outcomes of conflict resolution processes. Both models are exploratory and this distinction was purely for conceptual interpretations. -->
+
+The elastic net model using the 36 costs and benefit variables uses the $\lambda_{min}$ tuning parameter, which was chosen by cross-validation to minimize model deviance. The model of the 72 quality and function variables, however, uses $\lambda_{1SE}$, i.e., $\lambda$ value within 1 $SE$ of the optimized $\lambda_{min}$. Because there were many more predictors in the qualities and functions model the more conservative $\lambda_{1SE}$ results, with lower coefficients and fewer selected predictors was preferred; because the costs and benefits model included relatively fewer predictors, the optimized $\lambda_{min}$ model was preferred. 
+
+The non-zero coefficients of the qualities and functions model (Figure \@ref(fig:leaderdimplot)A) indicated that the functions *Group representative*, *Provide counsel/direction*, *Protection*, and *Punishment*, and the qualities *Interpersonal skills*, and *Fairness* positively predicted evidence for *Resolve conflict*. The non-zero coefficients of the costs and benefits model (Figure \@ref(fig:leaderdimplot)B) identified two benefits for followers, *Social services* and *Reduced risk of harm/conflict*; and five benefits for leaders, *Misc. Non-material resources*, *Social status/reputation*, *Food resources*, *Mating*, and *Social services*, which were all positive predictors of *Resolve conflict*. 
+
+```{r leaderdimplot, echo=FALSE, fig.width=10, fig.cap="Non-zero coefficients of leadership dimensions that best predicted evidence for *Resolve conflicts*, A: using all other qualitiy and function variables and B: using all cost and benefit variables. Both models used the lasso penality ($\\alpha=1$), with $\\lambda_{1SE}$ chosen by cross-validation (1 SE from $\\lambda_{min}$). A depicts coeffecients from the more conservative $\\lambda_{1SE}$. B depicts coeffencits from the optimized $\\lambda_{min}$. Purple values indicate positive predictors. Predictors with coefficents = 0 not displayed. X-axes are odds ratios on a log 10 scale."}
+
+#highstatus_plot <- highstatus_plot + scale_x_log10()
+p <- 
+  plot_elastic_conflict + plot_elastic_conflict_cb + 
+  plot_annotation(
+    title = 'Leadership dimensions predicting evidence for conflict resolution',
+    tag_levels = 'A', 
+    caption = 'Odds ratio', 
+    theme=theme(plot.caption=element_text(hjust=0.5, size=12, margin=margin(t=0)))
+  )
+
+ggsave('Figures/leaderdim_plotst.pdf', p, width=10, height = 7)
+
+p
+```
+
+
+### Variation in social context of conflict resolution
+
+@garfield_universal_2020, in their systematic analyses of 109 leadership dimensions, identified *Resolve conflict* as a candidate universal of human leadership (see their Table 1), given this measure did not meaningfully vary by continental region, subsistence strategy, group context, or leader sex -- four predictors applied to all leadership dimensions -- relative to an intercept-only model. Here, the focus is on the *Resolve conflict* measure specifically and there is very little evidence for female leaders engaged in conflict resolution in the database. Therefore, to expand on the modeling approach by @garfield_universal_2020, specifically for conflict resolution, a logistic mixed effects model of *Resolve conflict* was fit (similarly to the @garfield_universal_2020 approach with random intercepts for document authors nested within cultures), but which excluded the *leader sex* term. This three-term model *did* show an improvement in fit over the intercept only model ($\Delta AIC = -2.33$).
+
+<!-- signif(aic_3pred-aic_INT, 3) -->
+
+Figure \@ref(fig:model-plots) plots the estimated marginal means of *continental region*, *subsistence strategy* and *group context* from the three-term logistic mixed effects model of *Resolve conflict* and Table \@ref(tab:mod-anova) provides results of an ANOVA test of the fitted model. *Continental region* and *subsistence strategy* do not vary or predict *Resolve conflict*, however *group context* was a significant predictor ($\alpha = 0.05$). 
+
+
+```{r model-plots, echo=FALSE, fig.width=15, fig.cap="Estimated marginal means of evidence for conflict resolution by continental region (A), subsistence strategy (B), and group context (C) from a three-term logistic mixed effects regression model with random intercepts for author nested within culture. Values are on the response scale (probability)."}
+p2 <- modelplot_reg + modelplot_sub + modelplot_grp +
+  plot_annotation(
+    title = 'Group-level predictors of evidence for conflict resolution',
+    tag_levels = 'A', 
+    caption = 'Probability', 
+    theme=theme(plot.caption=element_text(hjust=0.5, size=12, margin=margin(t=0)))
+  )
+
+ggsave('Figures/groupmodel_plot.pdf', p2, width=15, height = 8)
+
+p2
+```
+
+```{r mod-anova, results="asis", fig.width=15}
+tab1 <- Anova(mm_conflict_group3)
+knitr::kable(tab1, caption = "Analysis of deviance results (Type II Wald chisquare tests) of three-term model of Resolve Conflict.", digits = 3)
+```
+
+
+Pairwise comparisons of estimated marginal means from levels of *group context* were compared using contrast analysis to identify the varying contexts and those which predicted evidence for *Resolve conflict* in the three-term model. One pairwise comparison -- *kin group* vs. *political group (supracommunity)* -- produced a statistically significant mean difference (Tukey-adjusted p-value $< 0.05$) with *kin groups* producing the higher estimated marginal mean. 
+
+```{r contrast-plot, fig.width=10, fig.cap="Plot of P values from pairwise comparisons of estimated marginal means of levels of *group context* from three-term logistic regression model or *Resolve conflict*"}
+ggsave('Figures/contrasts_plot.pdf', contrasts_plot)
+contrasts_plot
+```
+
+
+## Discussion
+
+### Cross-cultural commonality and variability 
+
+The ethnographic record of leadership in conflict resolution provides substantially greater evidence for conflict resolution within-groups than between groups including across populations with variable subsistence strategies and across distinct social contexts (Figures \@ref(fig:mosaic-sub) and \@ref(fig:mosaic-context)). These results support recent work in anthropology emphasizing within-group heterogeneity, variability, and social complexity among populations such as mobile hunter-gatherers, often characterized as "small-scale" [e.g., @hill_co-residence_2011; @bird_variability_2019]. Between-group conflicts, although relatively less represented in this ethnographic sample, are consistently documented across all subsistence types including, hunter-gatherers providing additional evidence for the ubiquity of inter-group conflicts across the vast majority of human societies and consistent with claims of the presence of inter-group conflict across human evolutionary history [@glowacki_evolutionary_2020; @hames_pacifying_2019; @lopez_evolution_2016].
+
+### The correlates of conflict resolution
+
+Identifying the suite of traits commonly associated with conflict resolution capacities has received substantial focus and is of broad multidisciplinary, industrial, and political interest. The vast majority of studies on the behavioral and personality traits of conflict mediators, however have relied on Western participants in either general or very specific postindustrial contexts [e.g., @moberg_predicting_1998; @sternberg_styles_1984; @corneliussen_individual_2017]. Empirical support for such traits from a representative sample of human cultural diversity has not previously been available and much of the wider conflict resolution literature suffers from the "WEIRD people problem," in that evidence is strongly biased towards Western, educated, industrialized, rich, and democratic populations [@henrich_weirdest_2010; @apicella_beyond_2020; @henrich_weirdest_2020]. Furthermore, most cross-cultural and ethnographic studies of conflict and conflict resolution have focused on inter-group conflicts including warfare and blood feuds [e.g., @ember_war_1994; @ember_resource_1992; @glowacki_warfare_2015; @ericksen_blood_1992; @fry_lethal_2013], leaving a gap in the cross-cultural evidence of the traits broadly associated with conflict resolution, including within-group conflicts.
+
+@tehrani_personality_2020 provide a meta-analysis of psychological studies investigating associations between conflict resolution and personality traits (using the Five-Factor Personality Inventory (FFPI) or the revised FFPI) with five distinct conflict resolution styles (i.e., avoidance, compromising, integrating, obliging, dominating). A few results in particular are useful for interpreting the patterns of leadership in conflict resolution here. They found a positive relationships between extroversion and the dominating style of conflict resolution -- where conflict mediators display a high concern for self, a low concern for others, and are selfish in influencing outcomes -- and agreeableness was negatively associated with dominating styles and positively associated with an obliging style -- where conflict mediators display a low concern for self, a high concern for others, and promote prosocial outcomes -- and an integrating style -- where conflict mediators display a high concern for self and others and promote mutually beneficial outcomes.
+
+Drawing on a near comprehensive database of 109 leadership dimensions, exploratory analyses identified six dimensions predictive of conflict resolution as well as a suite of benefits leaders and followers frequently receive in the context of conflict resolution processes. Leaders who resolve conflicts are also likely to perform other prosocial group functions including, group representation, counseling and advising followers, and providing protection and punishment services. The importance of group representation suggests leaders who resolve within-group conflicts are also heavily involved in between-group interactions, though not necessarily between-group conflicts. Empirical and ethnographic findings across diverse societies, including relatively egalitarian populations, suggests group representation often includes the development and maintenance of cooperative relationships and alliances [@boehm_hierarchy_1999; @von_rueden_leadership_2014; @bowser_womens_2010]. These results support Boehm's [-@boehm_evolutionary_1982, p. 329] speculation that, "when peace is actively created between fighting groups, it is likely that the same ideologies that so strongly support conflict resolution within the group are being applied in a similarly problem-solving fashion, but obviously in a between-group context."  
+
+Results reported here on the importance of providing counsel and direction, interpersonal skills, and fairness among conflict mediators across cultures and contexts supports the relationships between agreeableness and the integrating and obliging styles of conflict resolution discussed by @tehrani_personality_2020. Other group-service provision functions are more strongly related to evidence for conflict resolution in the ethnographic record than are many theoretically important individual qualities. The association of providing counsel and direction in followers affairs, rather than evidence for coercion, fear, manipulation or physical formidability, suggests conflict resolution often involves leaders advising followers and providing input *influencing* outcomes rather than *mandating* specific outcomes. Therefore, across societies conflict resolution capacities are unlikely to be associated with dominance-based influence and more likely to be associated with freely conferred prestige-based influence [@cheng_two_2013; @von_rueden_roots_2014; @henrich_evolution_2001]. Counseling followers in conflict is also key *computational service* and the connection between counseling and conflict resolution services lends some support the importance of mutually beneficial decision-making cognition as potential selective pressure in social or biological evolutionary models [@garfield_evolutionary_2019; @hagen_leadership_2019].
+
+The benefits associated with conflict resolution both leaders and followers (and the absence of any associated costs) suggests conflict mediation across diverse contexts is likely to be integrative and mutually beneficial for multiple parties, consistent with the *joint utility improvement* by where leaders are preferred for their mutually beneficial decision-making capacities [@hagen_leadership_2019; @garfield_evolutionary_2019]. 
+
+Results here do not support an association of dominance-based leadership with conflict resolution. However, @garfield_universal_2020 (using the same data analyzed here) found that *Punishment* was the strongest positive predictor of coercive authority, a leadership quality implicated in the dominance style of leadership [@tiger_dominance_1970; @garfield_evolutionary_2019; @cheng_two_2013; @henrich_evolution_2001] and punishment services by leaders was moderately associated with conflict resolution in results here. Although qualities linked to dominance-based influence are not strongly associated with leaders who resolve conflict in the ethnographic record, there is potentially a connection between abilities to enforce punishment and resolve conflict, with dominance-based influence.
+
+
+Surprisingly, measures of social networks or allies; knowledge, experience, or decision-making capacities; or physical formidability were not identified as predictors of conflict resolution, as suggested by @glowacki_leadership_2015, @garfield_evolutionary_2019, and @hagen_leadership_2019. Interpersonal skills and fairness were the only leader qualities predictive of conflict resolution. Although relationships between interpersonal skill and fairness with conflict resolution are weak by comparison to the other group-beneficial functions, these variables were nonetheless selected among the large suite of other measures. This supports links between effective conflict resolution and moral evaluations of social justice, suggesting individuals who conform to and embody these traits are preferred in mediation processes. Effective mediators of conflict then are not necessarily leaders who can be conceptualized as particularly prestigious or dominant, but are more likely to be individuals who effectively identify overlapping interests between individuals with distinct priorities fairly, consistent with emerging views on leadership and followership focused on process and outcomes over inter-individual traits [@vollan_procedural_2020; @wiessner_collective_2019]. Strong preferences for fairness potentially has deep psychological and evolutionary origins [@stavans_infants_2019; @nowak_fairness_2000; @haidt_new_2007]. The importance of these leader qualities support an evolved psychology of procedural fairness discussed by @boggild_evolved_2016 and implicate evaluations of a welfare trade off ratio, or values and psychologies among followers for leaders in conflict resolution who will weight appropriately individual welfare, in conflict resolution decision-making processes [@petersen_evolutionary_2010; @sell_formidability_2009]. 
+
+### Benefits associated with conflict resolution processes
+
+Followers benefit from conflict resolution via the social services provided (i.e., the conflict resolution process itself), which can include reduced risk of harm. The benefits to followers identified here essentially reveal the conflict resolution services they receive and were the only follower-benefit variables associated with conflict resolution. There is not strong evidence followers receive other forms of indirect benefits via conflict resolution processes, such as material, social, or fitness benefits. Leaders who resolve conflicts, however, were associated with a wider range of benefits including various non-material resources, social status or reputation benefits, food benefits, mating benefits, and social services from followers. These findings strongly align with the service-for-prestige theory of leadership [@price_evolution_2014], but also suggest leaders who resolve conflicts receive substantial benefits beyond social status and prestige. Conflict resolution service providers also receive mating benefits, consistent with a wide literature linking leadership to increased reproductive success [@von_rueden_mens_2016; @hagen_leadership_2019; @garfield_evolutionary_2019], as well as social services, which could indicate a process of reciprocal altruism in specialized service provision within human groups [@trivers_evolution_1971; @wiessner_risk_1982; @gintis_strong_2008].
+
+### The cultural ecology of conflict resolution
+
+Anthropologists have long debated the relative importance of concerted conflict management across populations with varying levels of "complexity," generally defined as more intensified subsistence economies and more elaborated and hierarchical sociopolitical structures [c.f., @knauft_violence_1991; @wiessner_rift_2016; @lee_work_1972]. For example, @lee_work_1972 [p. 182], downplaying within-group conflicts and conflict resolution among mobile hunter-gatherers suggests, 
+
+>"in contrast to agricultural and urban peoples, hunters have a great deal of latitude to vote with their feet, to walk out of an unpleasant situation. And they do so, not when the food supply is exhausted, but well before that point when only their patience is exhausted. This mobility has a profound ecological adaptive significance. Fear and avoidance of conflict has the effect of keeping people apart."
+
+Demography is also implicated in shaping conflict rates and management and @lee_hunter-gatherers_2018[p. 6] suggests, "living at very low densities, foragers had fewer things to fight over and, with little or no fixed property, could easily vote with their feet and disperse to diffuse conflict." Larger more densely populated, sedentary groups with more intensified economies and greater sociopolitical complexity are thought to have greater pressures of within and between group conflicts, and hence be equipped socially and politically with more elaborate conflict management processes. Despite any influence on conflicts due to mobility and demography, conflict resolution management and resolution systems are universal across human societies, including among mobile hunter-gatherers [see @boehm_biocultural_2013]. The "vote with their feet" hypothesis would suggest evidence for conflict resolution to be more frequent in the ethnographic record of agricultural and horticultural populations relative to more mobile hunter-gatherers or pastoralists. Exploratory analyses here, however, did not find variation in evidence for within or between group conflict resolution across cultures with different subsistence strategies (Figure \@ref(fig:mosaic-sub)) and subsistence did not predict evidence for conflict resolution (controlling for region and group context, (Figure \@ref(fig:model-plots)). Therefore, the "vote with their feet" hypothesis promoted by Lee and others and a cultural ecology of conflict resolution grounded in variation in subsistence strategies are not supported. One possible exception to this general cross-cultural consistency was the slightly greater frequency of evidence for between-group conflict resolution among pastoralists (Figure \@ref(fig:mosaic-sub)). This trend could be due in part to pressures from shared resources related to livestock-based subsistence economies including access to water sources and grazing land and the diffuse and shifting nature of territoriality among pastoralists [c.f., @glowacki_customary_2013; @garfield_evolutionary_2019; @fratkin_ethiopias_2014].
+
+Group context did emerge as a potential driver of variable demands for conflict resolution. Controlling for subsistence strategy and continental region, group context was a significant predictor of evidence for conflict resolution, with kin groups providing greater evidence for conflict resolution in contrast to higher-order political groups (see Figures \@ref(fig:model-plots) and \@ref(fig:contrast-plot)). Logistic regression (Figure \@ref(fig:model-plots)) also identified a general trend of greater evidence for conflict resolution among more local and generalized groups (e.g., kin group, residential subgroups) compared to larger and more specialized groups (e.g., hierarchical political groups, military groups); a trend also supported by the text-analysis of conflict resolution ethnography (Figure \@ref(fig:text-plot)). 
+
+## Conclusion
+
+The ethnographic record provides substantial evidence that conflict resolution by leaders often occurs in the context of within-group conflicts, globally and across populations with variable subsistence economies. Evidence for between-group conflict resolution, although more limited, is also not biased towards any particular subsistence strategy. Culturally and economically diverse populations therefore likely face similar demands for conflict resolution and individual leaders reliably emerge as mediators of conflicts, across human societies.
+
+Within-group conflict resolution services then, are perhaps best viewed as part of larger leadership processes aimed to promote within-group cohesion and successful between-group relations. Variation in conflict resolution capacities are more likely to be associated with a wider range of leadership functions than particular personality traits or individual qualities, however, interpersonal skills and fairness are also likely to be important qualities of individuals who effectively resolve conflicts, across diverse cultural and social contexts. These results suggest followers benefit primarily directly from conflict resolution processes, however individuals who effectively mediate conflicts receive a variety of indirect benefits including special status, mating and food benefits, and reciprocal services from followers.
+
+Although evidence for conflict resolution did not meaningfully vary across regions or by subsistence strategies, there was some evidence group context likely impacts demands of inter-individual conflict. More localized and smaller groups, such as kin groups are more likely to feature leaders who actively resolve conflicts. Leaders within higher-order political groups are less likely to be actively involved in conflict resolution.  
+
+The ethnographic record is an indispensable tool to for uncovering human cultural diversity and universality. To better understand the potential likelihood of conflict emergence, scholars and managers should focus on micro-level group and social contexts, rather than macro-level group variation, such as subsistence economies or national characteristics. Groups with less hierarchical structure and greater face-to-face interaction may be predisposed to increased rates of within-group interpersonal conflicts. Individuals who generally provide group-beneficial services and have reputations for fairness and interpersonal skills are likely to be best positioned to facilitate conflict resolution. Alternatively, increased internal organizational structure may also reduce the likelihood individual conflicts emerge and facilitate conflict mediation structurally. Theoretical models of conflict resolution can draw on the systematic results here in developing more robust, generalizable theories of conflict management.
+
+
+
+
+## References
+
