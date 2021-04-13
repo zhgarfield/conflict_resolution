@@ -276,6 +276,14 @@ Although evidence for conflict resolution did not meaningfully vary across regio
 
 The ethnographic record is an indispensable tool to for uncovering human cultural diversity and universality. To better understand the potential likelihood of conflict emergence, scholars and managers should focus on micro-level group and social contexts, rather than macro-level group variation, such as subsistence economies or national characteristics. Groups with less hierarchical structure and greater face-to-face interaction may be predisposed to increased rates of within-group interpersonal conflicts. Individuals who generally provide group-beneficial services and have reputations for fairness and interpersonal skills are likely to be best positioned to facilitate conflict resolution. Alternatively, increased internal organizational structure may also reduce the likelihood individual conflicts emerge and facilitate conflict mediation structurally. Theoretical models of conflict resolution can draw on the systematic results here in developing more robust, generalizable theories of conflict management.
 
+## Acknowledgments
+
+Luke Glowacki, Anthony Lopez, Kristen Syme and Raymond Hames provided helpful feedback on the manuscript. The data associated with this project are available at https://doi.org/10.5281/zenodo.2541999 and were developed with Edward Hagen and Kristen Syme and the framework draws on methods from Garfield, Syme, and Hagen (2020).
+
+This research was funded by National Science Foundation Division of Behavioral and Cognitive Sciences award [1628509]. Zachary H. Garfield acknowledges IAST
+funding from the French National Research Agency (ANR) under the Investments for the Future (Investissements d’Avenir) program, grant ANR-17-EURE-0010.
+
+
 
 
 
