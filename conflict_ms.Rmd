@@ -1,7 +1,7 @@
 ---
 title: "Correlates of conflict resolution across cultures"
-author: "Zachary H. Garfield"
-date: "9/28/2020"
+author: "Zachary H. Garfield, Institute for Advanced Study in Toulouse"
+date: "13 April 2021"
 output: 
   bookdown::html_document2:
     number_sections: false
@@ -33,7 +33,9 @@ library(sjPlot)
 ```
 
 ### Preprint statment
-The current manuscript is a pre-print and currently under review as of 13 April, 2021.
+The current manuscript is a pre-print and currently under review as of 13 April, 2021. 
+[![DOI](https://zenodo.org/badge/357503848.svg)](https://zenodo.org/badge/latestdoi/357503848)
+
 
 ## Abstract
 
@@ -70,7 +72,7 @@ Early ethnographers extensively documented cultural variation in typologies of c
 
 <!-- WEISSNER -->
 
-More recently, evolutionary anthropologists have emphasized the important role of leaders, senior kin, and other influential community members as the managers of conflicts withing and between families and kin groups and have suggested such conflict resolution processes underlay much of human psychological, biological, and cultural evolution [@glowacki_leadership_2015; @hames_kin_2015; @garfield_evolutionary_2019; @boehm_biocultural_2013]. Drawing on the ethnography of smaller-scale, politically autonomous populations and empirical field data @glowacki_leadership_2015 frame within-group conflict resolution as one type of collective action problem populations must overcome. They suggest effective leadership emerges and is selected for as a critical component in the resolution of collective action problems within an institutional system and individuals with wider social networks, greater knowledge, and physical fromidability will be more likely to effectively resolve inter-individual conflicts. Nonetheless, most of the evolutionary anthropological literature on conflict has focused on evolutionary underpinnings of warfare and between group conflict [see @glowacki_evolutionary_2017; @sluka_anthropology_1992; @lopez_evolutionary_2020].
+More recently, evolutionary anthropologists have emphasized the important role of leaders, senior kin, and other influential community members as the managers of conflicts within and between families and kin groups and have suggested such conflict resolution processes underlay much of human psychological, biological, and cultural evolution [@glowacki_leadership_2015; @hames_kin_2015; @garfield_evolutionary_2019; @boehm_biocultural_2013]. Drawing on the ethnography of smaller-scale, politically autonomous populations and empirical field data @glowacki_leadership_2015 frame within-group conflict resolution as one type of collective action problem populations must overcome. They suggest effective leadership emerges and is selected for as a critical component in the resolution of collective action problems within an institutional system and individuals with wider social networks, greater knowledge, and physical fromidability will be more likely to effectively resolve inter-individual conflicts. Nonetheless, most of the evolutionary anthropological literature on conflict has focused on evolutionary underpinnings of warfare and between group conflict [see @glowacki_evolutionary_2017; @sluka_anthropology_1992; @lopez_evolutionary_2020].
 
 ## Study aims
 
