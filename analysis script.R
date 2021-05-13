@@ -380,10 +380,11 @@ df_groups_conf <- df_groups_conf[!is.na(df_groups_conf$context),]
 
 plot_sub_context <-
   ggplot(df_groups_conf) +
-  geom_mosaic(aes(x = product(context, subsistence), fill = context)) +
+  geom_mosaic(aes(x = product(context, subsistence), fill = context),
+              show.legend = FALSE) +
   scale_fill_viridis(discrete = T) +
   labs(x="", y="", fill = "Context of conflict") +
-  guides(fill = guide_legend(reverse = T)) +
+  #guides(fill = guide_legend(reverse = T)) +
   theme_minimal(20) 
 plot_sub_context
 ggsave("subsistence.pdf", plot_sub_context, width = 17)
@@ -391,10 +392,11 @@ ggsave("subsistence.pdf", plot_sub_context, width = 17)
 
 plot_group_context <-
   ggplot(df_groups_conf) +
-  geom_mosaic(aes(x = product(context, group), fill = context)) +
+  geom_mosaic(aes(x = product(context, group), fill = context),
+              show.legend = FALSE) +
   scale_fill_viridis(discrete = T) +
   labs(x="", y="", fill = "Context of conflict") +
-  guides(fill = guide_legend(reverse = T)) +
+  #guides(fill = guide_legend(reverse = T)) +
   theme_minimal(20)
 plot_group_context
 ggsave("context.pdf", plot_group_context, width = 15)
@@ -440,6 +442,39 @@ plot_elastic_conflict_cb <- ggdotchart(exp(exp(coefs_cb[coefs_cb != 0])), thresh
   scale_color_viridis_d() +
   scale_x_log10()
 plot_elastic_conflict_cb
+
+all_data$conflict_within <- 0
+all_data$conflict_within[all_data$functions_ResolveConflcit==1 & all_data$functions_Context=="within-group"]=1
+
+all_data$conflict_between <- 0
+all_data$conflict_between[all_data$functions_ResolveConflcit==1 & all_data$functions_Context=="between-group"]=1
+
+
+#Elastic net of within group conflict resolution
+all_data_within_between <- all_data %>% 
+  select(-functions_ResolveConflcit)
+
+plot_elastic_conflict_within = elastic_dimensions(all_data_within_between, 'conflict_within', c('functions', 'qualities'), alpha = 1, lambda = 'lambda.1se')
+plot_elastic_conflict_within <- plot_elastic_conflict_within +
+  scale_color_viridis_d()
+
+plot_elastic_conflict_between = elastic_dimensions(all_data_within_between, 'conflict_between', c('functions', 'qualities'), alpha = 1, lambda = 'lambda.min')
+plot_elastic_conflict_between <- plot_elastic_conflict_between +
+  scale_color_viridis_d()
+
+
+## Cross validate alpha and lambda
+
+# elastic_within2 <- cva.glmnet(
+#   all_data_within_between[,c(21:24,26:47,67:112)],
+#   conflict_within,
+#   alpha = seq(0, 1, len = 11)^3,
+#   nfolds = 10,
+#   foldid = sample(rep(seq_len(nfolds), length = nrow(x))),
+#   outerParallel = NULL,
+#   checkInnerParallel = TRUE
+# )
+
 
 # Logistic model ----------------------------------------------------------
 
@@ -517,7 +552,7 @@ pairs(means)
 pwpm(means)
 plot(means, comparisons=TRUE)
 contrasts_plot <- pwpp(means) +
-  labs(y="", x = "\nTukey-adjusted P value") +
+  labs(y="", x = "") +
   scale_colour_viridis(discrete = T, direction = -1, option = "D") +
   theme_minimal(20)
 
